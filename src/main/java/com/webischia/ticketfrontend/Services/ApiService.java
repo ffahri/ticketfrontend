@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ApiService {
 
-    List<Tickets> getTickets();
+    List<Tickets> getTickets(String token);
 }
