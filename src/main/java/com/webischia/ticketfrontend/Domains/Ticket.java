@@ -21,7 +21,7 @@ public class Ticket implements Serializable {
     private String ticketTitle;
     private User userTicket;
     private Boolean status;
-    private Integer creationDate;
+    private long creationDate;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 }

@@ -7,10 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 
-public class ListTickets {
+public class ListTickets implements Serializable {
     List<Ticket> tickets;
 
     public List<Ticket> getTickets() {
