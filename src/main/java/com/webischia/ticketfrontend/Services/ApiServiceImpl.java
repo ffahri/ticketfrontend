@@ -1,11 +1,9 @@
 package com.webischia.ticketfrontend.Services;
 
 import com.webischia.ticketfrontend.Domains.ListTickets;
-import com.webischia.ticketfrontend.Domains.Tickets;
+import com.webischia.ticketfrontend.Domains.Ticket;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,18 +23,21 @@ public class ApiServiceImpl implements ApiService{
     }
 
     @Override
-    public List<Tickets> getTickets(String token) {
+    public List<Ticket> getTickets(String token) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(api_url);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+token);
 
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-        ListTickets tickets = restTemplate.postForObject(uriBuilder.toUriString(),entity,ListTickets.class);
+        HttpEntity entity = new HttpEntity(headers);
+/*
+        ListTickets liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody();
+*/
 
+        List<Ticket> tickets = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
+        System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
 
-        return tickets.getTicketsList();
+        return tickets;
 
     }
 }

@@ -1,10 +1,10 @@
 package com.webischia.ticketfrontend.Services;
 
-import com.webischia.ticketfrontend.Domains.Tickets;
+import com.webischia.ticketfrontend.Domains.Ticket;
 
 import java.util.List;
 
 public interface ApiService {
 
-    List<Tickets> getTickets(String token);
+    List<Ticket> getTickets(String token);
 }
