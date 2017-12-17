@@ -33,7 +33,9 @@
                         <li>
                             <a href="#">Hello , <label th:text="${user.username}">User</label></a>
                         </li>
-
+                        <li>
+                            <a th:href="@{'/logout'}">Logout</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -84,7 +86,7 @@
                     <td th:text="${ticket.creationDate}">
                         01/04/2012
                     </td>
-                    <td th:text="${ticket.status}">
+                    <td th:text="${ticket.status}" th:style="${ticket.status ? 'background-color:green' : 'background-color:red'}">
                         Default
                     </td>
                     <td>

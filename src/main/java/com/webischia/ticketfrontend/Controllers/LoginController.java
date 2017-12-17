@@ -51,4 +51,12 @@ public class LoginController {
 
         return "redirect:/user";
     }
+
+    @RequestMapping("/logout")
+    private String logout(HttpServletRequest request,Model model)
+    {
+        request.getSession().invalidate();
+        model.addAttribute("status","logout yaptınız");//todo güzel index sayfası
+        return "redirect:/index";
+    }
 }
