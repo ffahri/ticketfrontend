@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+<form th:object="${user}" th:action="@{/login/try}" method="post">
+
+    <p>
+        <!--todo th:if ile hata mesajı validator ekleyelim ve bootstrap uyumlu tasarım-->
+        <label for="username">Username</label>
+        <input class="form-control" id="username" type="text" th:field="${user.username}"/>
+    </p>
+    <p>
+        <label for="password">Password</label>
+        <input class="form-control" id="password" type="text" th:field="${user.password}"/>
+    </p>
+    <button type="submit" class="btn">Log in</button>
+</form>
+</body>
+</html>
