@@ -1,12 +1,15 @@
 package com.webischia.ticketfrontend.Controllers;
 
 import com.webischia.ticketfrontend.Domains.Messages;
+import com.webischia.ticketfrontend.Domains.NewTicketDTO;
 import com.webischia.ticketfrontend.Domains.Ticket;
 import com.webischia.ticketfrontend.Domains.UserToken;
 import com.webischia.ticketfrontend.Services.ApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,15 +44,31 @@ public class UserController {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            String title="",user="",msg="";
             model.addAttribute("user",UserInfo);
-            List<Ticket> ticketList = apiService.userGetOwnTickets(UserInfo.getToken().getAccess_token(),UserInfo.getUsername());
-            model.addAttribute("ticket",ticketList);
+            model.addAttribute("newticket",new NewTicketDTO());
             return "/user/create";
         }
         return "redirect:/index";
 
     }
 
+    @PostMapping
+    @RequestMapping("/user/add")
+    private String userAdd(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
+    {
+        UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
+        if(UserInfo != null) {
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user",UserInfo);
+            Boolean status = true;
+            //System.out.println(title+"  "+msg );
+            apiService.userCreateTicket(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getTitle(),newTicketDTO.getMessageContext(),status);
+            return "redirect:/user";
+
+        }
+        return "redirect:/index";
+    }
     @RequestMapping("/user/show/{id}")
     private String userShow(HttpServletRequest request, Model model, @PathVariable int id)
     {

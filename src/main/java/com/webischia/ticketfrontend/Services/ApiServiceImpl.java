@@ -1,5 +1,6 @@
 package com.webischia.ticketfrontend.Services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.webischia.ticketfrontend.Domains.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -11,7 +12,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApiServiceImpl implements ApiService{
@@ -90,8 +93,37 @@ public class ApiServiceImpl implements ApiService{
     }
 
     @Override
-    public void userCreateTicket(String token, Ticket ticket) {
+    public void userCreateTicket(String token,String username,String title,String message,Boolean status) {
 
+        String url="http://94.177.170.47:8080/api/v1/tickets/user/"+username;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("ticketTitle",title);
+        postMap.put("status",status);
+
+        int id= restTemplate.postForObject(uriBuilder.toUriString(), postMap, Ticket.class).getId();
+        this.userCreateMessage(token,username,message,id);
+
+    }
+
+    @Override
+    public void userCreateMessage(String token, String username,String message, int id) {
+        String url="http://94.177.170.47:8080/api/v1/messages/"+username+"/"+id+"/new";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("messageContext",message);
+
+        restTemplate.postForObject(uriBuilder.toUriString(), postMap, Messages.class);
     }
 
     @Override
