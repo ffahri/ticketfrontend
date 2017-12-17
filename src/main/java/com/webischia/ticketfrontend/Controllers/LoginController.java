@@ -26,18 +26,7 @@ public class LoginController {
         this.apiService = apiService;
     }
 
-    @RequestMapping("/user")
-    private String userDash(HttpServletRequest request,Model model)
-    {
-        UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
-        if(UserInfo != null) {
-            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
-            model.addAttribute("user",UserInfo);
-            return "/user/index";
-        }
-        return "redirect:/index";
 
-    }
     @RequestMapping({"","/","/index"})
     private String getIndex()
     {

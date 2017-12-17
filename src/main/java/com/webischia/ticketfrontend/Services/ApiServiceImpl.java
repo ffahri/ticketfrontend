@@ -1,9 +1,6 @@
 package com.webischia.ticketfrontend.Services;
 
-import com.webischia.ticketfrontend.Domains.ListTickets;
-import com.webischia.ticketfrontend.Domains.Ticket;
-import com.webischia.ticketfrontend.Domains.Token;
-import com.webischia.ticketfrontend.Domains.UserToken;
+import com.webischia.ticketfrontend.Domains.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -69,6 +66,58 @@ public class ApiServiceImpl implements ApiService{
         userToken.setPassword(password);
         userToken.setToken(token);
         return userToken;
+    }
+
+
+    @Override
+    public List<Ticket> userGetOwnTickets(String token,String username) {
+        String url="http://94.177.170.47:8080/api/v1/tickets/user/"+username;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+/*
+        ListTickets liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody();
+*/
+
+        List<Ticket> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
+        System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+
+        return liste;
+    }
+
+    @Override
+    public void userCreateTicket(String token, Ticket ticket) {
+
+    }
+
+    @Override
+    public Ticket showMyTicket(String token, int id) {
+        return null;
+    }
+
+    @Override
+    public List<Ticket> getTicketsByUsername(String token, String username) {
+        return null;
+    }
+
+    @Override
+    public List<Messages> userGetOwnMessagesByTicketId(String token, String username, int id) {
+        String url="http://94.177.170.47:8080/api/v1/messages/"+username+"/"+id;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        List<Messages> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListMessages.class).getBody().getMessages();
+        //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+        System.out.println(liste.get(0).getUserMessage().getName());
+        return liste;
     }
 }
 
