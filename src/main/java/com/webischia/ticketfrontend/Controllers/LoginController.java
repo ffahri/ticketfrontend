@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
-@SessionAttributes("UserInfo")
 public class LoginController {
 
     private final ApiService apiService;
@@ -26,11 +27,12 @@ public class LoginController {
     }
 
     @RequestMapping("/user")
-    private String userDash(@ModelAttribute("UserInfo") UserToken UserInfo)
+    private String userDash(HttpServletRequest request,Model model)
     {
-
+        UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null) {
-            System.out.println(UserInfo.getToken().getAccess_token());
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user",UserInfo);
             return "/user/index";
         }
         return "redirect:/index";
@@ -50,16 +52,14 @@ public class LoginController {
     }
     @PostMapping
     @RequestMapping("/login/try")
-    private ModelAndView getLogin(@ModelAttribute UserToken user)
+    private String getLogin(@ModelAttribute UserToken user,HttpServletRequest request)
     {
         //ShoppingCart cart = (ShoppingCart)request.getSession().setAttribute("cart",value);
         //UserToken test = (UserToken)request.getSession().setAttribute()
-        System.out.println(user.getPassword());
+        //System.out.println(user.getPassword());
         UserToken userToken = apiService.loginUser(user.getUsername(),user.getPassword());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("UserInfo", userToken);
-        //modelAndView.setViewName("single-field-page");
-        return modelAndView;
-        //return "redirect:/user";
+        request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
+
+        return "redirect:/user";
     }
 }
