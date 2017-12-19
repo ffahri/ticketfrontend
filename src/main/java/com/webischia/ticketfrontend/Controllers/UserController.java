@@ -59,7 +59,7 @@ public class UserController {
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null) {
-            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            System.out.println(UserInfo.getToken().getAccess_token());
             model.addAttribute("user",UserInfo);
             Boolean status = true;
             //System.out.println(title+"  "+msg );
@@ -68,6 +68,22 @@ public class UserController {
 
         }
         return "redirect:/index";
+    }
+    @PostMapping
+    @RequestMapping("/user/add/message")
+    private String createMessage(@ModelAttribute UserToken user,HttpServletRequest request,Model model ,@ModelAttribute NewTicketDTO newTicketDTO) {
+        UserToken UserInfo = (UserToken) request.getSession().getAttribute("userinfo");
+        if (UserInfo != null) {
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user", UserInfo);
+            //System.out.println(newTicketDTO.getId());
+            apiService.userCreateMessage(user.getToken().getAccess_token(),user.getUsername(),newTicketDTO.getMessageContext(),newTicketDTO.getId());
+            return "redirect:/user/show"+newTicketDTO.getId();
+
+        }
+        return "redirect:/index";
+
+
     }
     @RequestMapping("/user/show/{id}")
     private String userShow(HttpServletRequest request, Model model, @PathVariable int id)
@@ -78,6 +94,9 @@ public class UserController {
             model.addAttribute("user",UserInfo);
             List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),id);
             model.addAttribute("msg",ticketList);
+            NewTicketDTO newID = new NewTicketDTO();
+            newID.setId(id);
+            model.addAttribute("newmessage", newID);
             return "/user/show";
         }
         return "redirect:/index";

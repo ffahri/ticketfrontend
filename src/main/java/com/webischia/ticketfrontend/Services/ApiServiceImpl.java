@@ -43,7 +43,7 @@ public class ApiServiceImpl implements ApiService{
 */
 
         List<Ticket> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
-        System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+      //  System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
 
         return liste;
 
@@ -87,7 +87,7 @@ public class ApiServiceImpl implements ApiService{
 */
 
         List<Ticket> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
-        System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+       // System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
 
         return liste;
     }
@@ -100,13 +100,13 @@ public class ApiServiceImpl implements ApiService{
                 .fromUriString(url);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer "+token);
+        headers.add("Authorization", "Bearer "+token);
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, Object> postMap = new HashMap<>();
         postMap.put("ticketTitle",title);
         postMap.put("status",status);
-
-        int id= restTemplate.postForObject(uriBuilder.toUriString(), postMap, Ticket.class).getId();
+        HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(postMap, headers);
+        int id= restTemplate.postForObject(uriBuilder.toUriString(), request, Ticket.class).getId();
         this.userCreateMessage(token,username,message,id);
 
     }
@@ -122,8 +122,8 @@ public class ApiServiceImpl implements ApiService{
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, Object> postMap = new HashMap<>();
         postMap.put("messageContext",message);
-
-        restTemplate.postForObject(uriBuilder.toUriString(), postMap, Messages.class);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(postMap, headers);
+        restTemplate.postForObject(uriBuilder.toUriString(), request, Messages.class);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ApiServiceImpl implements ApiService{
         HttpEntity entity = new HttpEntity(headers);
         List<Messages> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListMessages.class).getBody().getMessages();
         //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
-        System.out.println(liste.get(0).getUserMessage().getName());
+       // System.out.println(liste.get(0).getUserMessage().getName());
         return liste;
     }
 }

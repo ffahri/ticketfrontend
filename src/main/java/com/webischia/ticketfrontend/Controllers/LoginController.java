@@ -3,6 +3,8 @@ package com.webischia.ticketfrontend.Controllers;
 import com.webischia.ticketfrontend.Domains.Token;
 import com.webischia.ticketfrontend.Domains.UserToken;
 import com.webischia.ticketfrontend.Services.ApiService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,11 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class LoginController {
@@ -47,9 +54,35 @@ public class LoginController {
         //UserToken test = (UserToken)request.getSession().setAttribute()
         //System.out.println(user.getPassword());
         UserToken userToken = apiService.loginUser(user.getUsername(),user.getPassword());
-        request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
 
-        return "redirect:/user";
+        List<String> allMatches = new ArrayList<String>();
+        Matcher m = Pattern.compile("(?<=\\[).+?(?=\\])")
+                .matcher(Jwts.parser()
+                        .setSigningKey(DatatypeConverter.parseBase64Binary("TWFZemtTam1relBDNTdM"))
+                        .parseClaimsJws(userToken.getToken().getAccess_token()).toString());
+        while (m.find()) {
+            allMatches.add(m.group());
+        }
+        userToken.setAccess(allMatches.get(2));
+        if(allMatches.get(2).equals("Client")) {
+            userToken.setAccess_id(1);
+            request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
+            return "redirect:/user";
+        }
+        else if(allMatches.get(2).equals("Employee")) {
+            userToken.setAccess_id(2);
+            request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
+            return "redirect:/management";
+
+        }
+        else if(allMatches.get(2).equals("Admin")) {
+            userToken.setAccess_id(3);
+            request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
+            return "redirect:/admin";
+        }
+        //request.getSession().setAttribute("userinfo",userToken); //ALL HAIL THE HTTPSESSION \v/
+        return "redirect:index";
+
     }
 
     @RequestMapping("/logout")

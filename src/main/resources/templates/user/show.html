@@ -79,7 +79,7 @@
 
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </button> <a class="navbar-brand" href="#">User Panel</a>
+                    </button> <a class="navbar-brand" href="#" th:href="@{'/user/'}">Panel</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -103,7 +103,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <div class="container darker" th:each="messages :${msg}"> <!--// todo rol bazlı renk th:class="${}" apiserver değişecek galiba -->
+                    <div class="container darker" th:class="${messages.userMessage.name==user.username}?'container':'container darker'" th:each="messages :${msg}"> <!--// todo rol bazlı renk th:class="${}" apiserver değişecek galiba -->
 
                         <span class="time-left" th:utext="${messages.userMessage.name} +'   ('+ (${messages.userMessage.email})+')'">User Name</span>
                         <span class="time-right" th:text="${messages.creationDate}">11:01</span>
@@ -113,8 +113,15 @@
                     </div>
 
                 </div>
-                <div class="panel-footer">
-                    CEVAP KISMI
+                <form th:object="${newmessage}" th:action="@{/user/add/message}" method="post">
+                    <label class="control-label">Mesajınız</label>
+                    <input type="hidden" th:value="${newmessage.id}" th:text="${newmessage.id}" th:field="${newmessage.id}"/>
+                    <textarea class="form-control" th:field="${newmessage.messageContext}">
+...
+			</textarea>
+                    <br/>
+                    <button class="btn btn-success" type="submit">Button</button>
+                </form>
                 </div>
             </div>
         </div>

@@ -10,5 +10,7 @@ public class UserToken {
     private String username;
     private String password;
     private Token token;
+    private String access;
+    private int access_id;
 
 }
