@@ -116,7 +116,7 @@ public class ApiServiceImpl implements ApiService{
         String url="http://94.177.170.47:8080/api/v1/messages/"+username+"/"+id+"/new";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
-
+        //System.out.println("buradayım");
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer "+token);
         headers.setContentType(MediaType.APPLICATION_JSON);

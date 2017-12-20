@@ -113,16 +113,19 @@
                     </div>
 
                 </div>
+                <div class="panel-footer">
                 <form th:object="${newmessage}" th:action="@{/user/add/message}" method="post">
                     <label class="control-label">Mesajınız</label>
-                    <input type="hidden" th:value="${newmessage.id}" th:text="${newmessage.id}" th:field="${newmessage.id}"/>
+                    <input type="hidden" th:value="${newmessage.id}" th:field="${newmessage.id}"/>
                     <textarea class="form-control" th:field="${newmessage.messageContext}">
 ...
 			</textarea>
                     <br/>
-                    <button class="btn btn-success" type="submit">Button</button>
+                    <button class="btn btn-success" type="submit">Cevap Yaz</button>
                 </form>
+
                 </div>
+            </div>
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@ public class UserController {
     private String userDash(HttpServletRequest request, Model model)
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
-        if(UserInfo != null) {
+        if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             model.addAttribute("user",UserInfo);
             List<Ticket> ticketList = apiService.userGetOwnTickets(UserInfo.getToken().getAccess_token(),UserInfo.getUsername());
@@ -42,7 +42,7 @@ public class UserController {
     private String userCreate(HttpServletRequest request, Model model)
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
-        if(UserInfo != null) {
+        if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             String title="",user="",msg="";
             model.addAttribute("user",UserInfo);
@@ -58,7 +58,7 @@ public class UserController {
     private String userAdd(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
-        if(UserInfo != null) {
+        if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
             System.out.println(UserInfo.getToken().getAccess_token());
             model.addAttribute("user",UserInfo);
             Boolean status = true;
@@ -73,12 +73,12 @@ public class UserController {
     @RequestMapping("/user/add/message")
     private String createMessage(@ModelAttribute UserToken user,HttpServletRequest request,Model model ,@ModelAttribute NewTicketDTO newTicketDTO) {
         UserToken UserInfo = (UserToken) request.getSession().getAttribute("userinfo");
-        if (UserInfo != null) {
+        if (UserInfo != null && UserInfo.getAccess().equals("Client")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             model.addAttribute("user", UserInfo);
-            //System.out.println(newTicketDTO.getId());
-            apiService.userCreateMessage(user.getToken().getAccess_token(),user.getUsername(),newTicketDTO.getMessageContext(),newTicketDTO.getId());
-            return "redirect:/user/show"+newTicketDTO.getId();
+
+            apiService.userCreateMessage(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getMessageContext(),newTicketDTO.getId());
+            return "redirect:/user/show/"+newTicketDTO.getId();
 
         }
         return "redirect:/index";
@@ -89,7 +89,7 @@ public class UserController {
     private String userShow(HttpServletRequest request, Model model, @PathVariable int id)
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
-        if(UserInfo != null) {
+        if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             model.addAttribute("user",UserInfo);
             List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),id);
