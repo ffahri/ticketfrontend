@@ -32,7 +32,7 @@ public class UserController {
             model.addAttribute("user",UserInfo);
             List<Ticket> ticketList = apiService.userGetOwnTickets(UserInfo.getToken().getAccess_token(),UserInfo.getUsername());
             model.addAttribute("tickets",ticketList);
-            return "/user/index";
+            return "user/index";
         }
         return "redirect:/index";
 
@@ -47,7 +47,7 @@ public class UserController {
             String title="",user="",msg="";
             model.addAttribute("user",UserInfo);
             model.addAttribute("newticket",new NewTicketDTO());
-            return "/user/create";
+            return "user/create";
         }
         return "redirect:/index";
 
@@ -97,7 +97,7 @@ public class UserController {
             NewTicketDTO newID = new NewTicketDTO();
             newID.setId(id);
             model.addAttribute("newmessage", newID);
-            return "/user/show";
+            return "user/show";
         }
         return "redirect:/index";
 

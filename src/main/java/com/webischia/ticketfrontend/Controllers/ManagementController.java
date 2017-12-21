@@ -30,7 +30,7 @@ public class ManagementController {
             model.addAttribute("user",UserInfo);
             List<Ticket> ticketList = apiService.getTickets(UserInfo.getToken().getAccess_token());
             model.addAttribute("tickets",ticketList);
-            return "/management/index";
+            return "management/index";
         }
         return "redirect:/index";
 
@@ -48,7 +48,7 @@ public class ManagementController {
             NewTicketDTO newID = new NewTicketDTO();
             newID.setId(id);
             model.addAttribute("newmessage", newID);
-            return "/management/show";
+            return "management/show";
         }
         return "redirect:/index";
 

@@ -44,7 +44,7 @@ public class LoginController {
     private String login(Model model)
     {
             model.addAttribute("user", new UserToken());
-            return "/login";
+            return "login";
     }
     @PostMapping
     @RequestMapping("/login/try")
