@@ -22,6 +22,7 @@ public interface ApiService {
     //Employee - Ticket
     List<Ticket> getTickets(String token);
     List<Ticket> getTicketsByUsername(String token,String username);
+    void closeTicketEmployee(String token, String username, int id);
 
 
 }

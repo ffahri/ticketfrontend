@@ -30,7 +30,7 @@ public class ApiServiceImpl implements ApiService{
     @Override
     public List<Ticket> getTickets(String token) {
 
-        String url="http://94.177.170.47:8080/api/v1/tickets";
+        String url="http://localhost:8080/api/v1/tickets";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
 
@@ -60,7 +60,7 @@ public class ApiServiceImpl implements ApiService{
         map.add("grant_type","password");
         map.add("password",password);
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromUriString("http://94.177.170.47:8080/oauth/token");
+                .fromUriString("http://localhost:8080/oauth/token");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         Token token = restTemplate.postForObject(uriBuilder.toUriString(),request,Token.class);
@@ -74,7 +74,7 @@ public class ApiServiceImpl implements ApiService{
 
     @Override
     public List<Ticket> userGetOwnTickets(String token,String username) {
-        String url="http://94.177.170.47:8080/api/v1/tickets/user/"+username;
+        String url="http://localhost:8080/api/v1/tickets/user/"+username;
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
 
@@ -95,7 +95,7 @@ public class ApiServiceImpl implements ApiService{
     @Override
     public void userCreateTicket(String token,String username,String title,String message,Boolean status) {
 
-        String url="http://94.177.170.47:8080/api/v1/tickets/user/"+username;
+        String url="http://localhost:8080/api/v1/tickets/user/"+username;
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
 
@@ -113,7 +113,7 @@ public class ApiServiceImpl implements ApiService{
 
     @Override
     public void userCreateMessage(String token, String username,String message, int id) {
-        String url="http://94.177.170.47:8080/api/v1/messages/"+username+"/"+id+"/new";
+        String url="http://localhost:8080/api/v1/messages/"+username+"/"+id+"/new";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
         //System.out.println("buradayım");
@@ -138,7 +138,7 @@ public class ApiServiceImpl implements ApiService{
 
     @Override
     public List<Messages> userGetOwnMessagesByTicketId(String token, String username, int id) {
-        String url="http://94.177.170.47:8080/api/v1/messages/"+username+"/"+id;
+        String url="http://localhost:8080/api/v1/messages/"+username+"/"+id;
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
 
@@ -150,6 +150,23 @@ public class ApiServiceImpl implements ApiService{
         //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
        // System.out.println(liste.get(0).getUserMessage().getName());
         return liste;
+    }
+
+    @Override
+    public void closeTicketEmployee(String token, String username, int id) {
+        String url="http://localhost:8080/api/v1/tickets/"+username+"/"+id+"/status";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,void.class);
+
+        //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+        // System.out.println(liste.get(0).getUserMessage().getName());
+
     }
 }
 

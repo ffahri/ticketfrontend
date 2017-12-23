@@ -1,0 +1,107 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+    <meta charset="UTF-8"/>
+    <title>Search Ticket</title>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button> <a class="navbar-brand" href="#" th:href="@{'/user/'}">Panel</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">Hello , <label th:text="${user.username}">User</label></a>
+                    </li>
+                    <li>
+                        <a th:href="@{'/logout'}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            Şikayet Ara
+        </h3>
+    </div>
+    <div class="panel-body">
+        <form th:object="${newticket}" th:action="@{/user/search}" method="post">
+            <label class="control-label"><h3>Arama Terimi</h3></label>
+            <input class="form-control" type="text" th:field="${newticket.messageContext}"/>
+            <br/>
+
+            <button class="btn btn-success" style="text-align: center" type="submit"><h3>Ara</h3></button>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <h3 class="panel-title">
+            Sonuç
+        </h3>
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Konu
+                </th>
+                <th>
+                    Oluşturulma Tarihi
+                </th>
+                <th>
+                    Durum
+                </th>
+                <th>
+                    İşlem
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="success" th:each="ticket: ${tickets}">
+                <td th:text="${ticket.id}">
+                    1
+                </td>
+                <td th:text="${ticket.ticketTitle}">
+                    TB - Monthly
+                </td>
+                <td th:text="${ticket.creationDate}">
+                    01/04/2012
+                </td>
+                <td th:text="${ticket.status}" th:style="${ticket.status ? 'background-color:green' : 'background-color:red'}">
+                    Default
+                </td>
+                <td>
+                    <a href="#" th:href="@{'/user/show/'+${ticket.id}}"> <button class="btn btn-success" type="button">İncele</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

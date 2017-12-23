@@ -102,4 +102,23 @@ public class UserController {
         return "redirect:/index";
 
     }
+    @RequestMapping("/user/search")
+    private String userSearch(HttpServletRequest request, Model model)
+    {
+        UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
+        if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user",UserInfo);
+            //List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername());
+          //  model.addAttribute("msg",ticketList);
+            model.addAttribute("user",UserInfo);
+            model.addAttribute("newticket",new NewTicketDTO());
+            List<Ticket> ticketList = null;
+            model.addAttribute("tickets",ticketList);
+            NewTicketDTO newID = new NewTicketDTO();
+            return "user/search";
+        }
+        return "redirect:/index";
+
+    }
 }

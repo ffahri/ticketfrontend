@@ -77,7 +77,7 @@ public class ManagementController {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             model.addAttribute("user", UserInfo);
 
-           // apiService.userCreateMessage(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getMessageContext(),newTicketDTO.getId());
+           apiService.closeTicketEmployee(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getId());
             return "redirect:/management";
 
         }
