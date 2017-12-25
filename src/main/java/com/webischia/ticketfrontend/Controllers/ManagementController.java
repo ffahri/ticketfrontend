@@ -43,8 +43,10 @@ public class ManagementController {
         if(UserInfo != null && UserInfo.getAccess().equals("Employee")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
             model.addAttribute("user",UserInfo);
-            List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),id);
-            model.addAttribute("msg",ticketList);
+            List<Messages> messagesList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),id);
+            model.addAttribute("msg",messagesList);
+            Ticket whichone = apiService.showTicket(UserInfo.getToken().getAccess_token(),id);
+            model.addAttribute("ticket",whichone);
             NewTicketDTO newID = new NewTicketDTO();
             newID.setId(id);
             model.addAttribute("newmessage", newID);

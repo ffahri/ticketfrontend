@@ -13,9 +13,10 @@ public interface ApiService {
 
     //User - Ticket
     List<Ticket> userGetOwnTickets(String token,String username);
+    List<Ticket> userSearchTickets(String token,String username,String term);
     void userCreateTicket(String token,String username,String title,String message,Boolean status);
-    Ticket showMyTicket(String token,int id);
-
+    Ticket showMyTicket(String token,int id,String name);
+    Ticket showTicket(String token , int id);
     //User-Messages
     List<Messages> userGetOwnMessagesByTicketId(String token, String username , int id);
     void userCreateMessage(String token, String username,String message, int id);

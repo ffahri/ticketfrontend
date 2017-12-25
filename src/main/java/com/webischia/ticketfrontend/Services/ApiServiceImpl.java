@@ -127,10 +127,31 @@ public class ApiServiceImpl implements ApiService{
     }
 
     @Override
-    public Ticket showMyTicket(String token, int id) {
-        return null;
+    public Ticket showMyTicket(String token, int id,String username) {
+        String url="http://localhost:8080/api/v1/tickets/"+username+"/"+id;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        Ticket ticket = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Ticket.class).getBody();
+        return ticket;
     }
 
+    public Ticket showTicket(String token , int id)
+    {
+        String url="http://localhost:8080/api/v1/tickets/"+id;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        Ticket ticket = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Ticket.class).getBody();
+        return ticket;
+
+    }
     @Override
     public List<Ticket> getTicketsByUsername(String token, String username) {
         return null;
@@ -154,7 +175,7 @@ public class ApiServiceImpl implements ApiService{
 
     @Override
     public void closeTicketEmployee(String token, String username, int id) {
-        String url="http://localhost:8080/api/v1/tickets/"+username+"/"+id+"/status";
+        String url="http://localhost:8080/api/v1/tickets/"+id+"/status";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(url);
 
@@ -162,10 +183,32 @@ public class ApiServiceImpl implements ApiService{
         headers.set("Authorization", "Bearer "+token);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(headers);
-        restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,void.class);
+        int value = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Void.class).getStatusCode().value();
+        System.out.println(value);
 
         //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
         // System.out.println(liste.get(0).getUserMessage().getName());
+
+    }
+
+    @Override
+    public List<Ticket> userSearchTickets(String token, String username, String term) {
+        String url="http://localhost:8080/api/v1/tickets/user/"+username+"/search/"+term;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+/*
+        ListTickets liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody();
+*/
+
+        List<Ticket> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
+        // System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+
+        return liste;
 
     }
 }

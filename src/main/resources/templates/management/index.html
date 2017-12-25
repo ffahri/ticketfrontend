@@ -67,7 +67,7 @@
             </div>
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <h3>Şikayetler</h3>
+                    <h3>Tickets</h3>
                 </div>
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
@@ -100,11 +100,11 @@
                     <td th:text="${ticket.creationDate}">
                         01/04/2012
                     </td>
-                    <td th:text="${ticket.status}" th:style="${ticket.status ? 'background-color:green' : 'background-color:red'}">
+                    <td th:text="${ticket.status}" th:style="${ticket.status ? 'backgrond-color:green' : 'background-color:red'}">
                         Default
                     </td>
                     <td>
-                        <a href="#" th:href="@{'/management/show/'+${ticket.id}}"> <button class="btn btn-success" type="button">İncele</button>
+                        <a href="#" th:href="@{'/management/show/'+${ticket.id}}"> <button class="btn btn-success" type="button">Show</button>
                         </a>
                     </td>
                 </tr>

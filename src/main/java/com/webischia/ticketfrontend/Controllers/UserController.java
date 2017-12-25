@@ -94,6 +94,8 @@ public class UserController {
             model.addAttribute("user",UserInfo);
             List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),id);
             model.addAttribute("msg",ticketList);
+            Ticket whichone = apiService.showMyTicket(UserInfo.getToken().getAccess_token(),id,UserInfo.getUsername());
+            model.addAttribute("ticket",whichone);
             NewTicketDTO newID = new NewTicketDTO();
             newID.setId(id);
             model.addAttribute("newmessage", newID);
@@ -103,7 +105,7 @@ public class UserController {
 
     }
     @RequestMapping("/user/search")
-    private String userSearch(HttpServletRequest request, Model model)
+    private String userSearch(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
     {
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
@@ -113,7 +115,7 @@ public class UserController {
           //  model.addAttribute("msg",ticketList);
             model.addAttribute("user",UserInfo);
             model.addAttribute("newticket",new NewTicketDTO());
-            List<Ticket> ticketList = null;
+            List<Ticket> ticketList = apiService.userSearchTickets(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getMessageContext());
             model.addAttribute("tickets",ticketList);
             NewTicketDTO newID = new NewTicketDTO();
             return "user/search";
