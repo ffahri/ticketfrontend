@@ -71,7 +71,6 @@ public class ManagementController {
 
 
     }
-    //todo ticket update close method -- apiserver
     @RequestMapping(value="/management/add/message", method= RequestMethod.POST, params="action=close")
     private String closeTicket(@ModelAttribute UserToken user, HttpServletRequest request, Model model , @ModelAttribute NewTicketDTO newTicketDTO) {
         UserToken UserInfo = (UserToken) request.getSession().getAttribute("userinfo");
@@ -80,6 +79,20 @@ public class ManagementController {
             model.addAttribute("user", UserInfo);
 
            apiService.closeTicketEmployee(UserInfo.getToken().getAccess_token(),UserInfo.getUsername(),newTicketDTO.getId());
+            return "redirect:/management";
+
+        }
+        return "redirect:/index";
+
+
+    }
+    @RequestMapping(value="/management/add/message", method= RequestMethod.POST, params="action=delete")
+    private String deleteTicket(@ModelAttribute UserToken user, HttpServletRequest request, Model model , @ModelAttribute NewTicketDTO newTicketDTO) {
+        UserToken UserInfo = (UserToken) request.getSession().getAttribute("userinfo");
+        if (UserInfo != null && UserInfo.getAccess().equals("Employee")) {
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user", UserInfo);
+            apiService.deleteTicket(UserInfo.getToken().getAccess_token(),newTicketDTO.getId());
             return "redirect:/management";
 
         }

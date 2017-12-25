@@ -29,6 +29,9 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>-->
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		
+
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>

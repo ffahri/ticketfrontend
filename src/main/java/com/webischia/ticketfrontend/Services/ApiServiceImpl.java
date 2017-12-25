@@ -7,11 +7,17 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,11 +189,8 @@ public class ApiServiceImpl implements ApiService{
         headers.set("Authorization", "Bearer "+token);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(headers);
-        int value = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Void.class).getStatusCode().value();
-        System.out.println(value);
+        restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Void.class);
 
-        //System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
-        // System.out.println(liste.get(0).getUserMessage().getName());
 
     }
 
@@ -210,6 +213,72 @@ public class ApiServiceImpl implements ApiService{
 
         return liste;
 
+    }
+
+    @Override
+    public void deleteTicket(String token, int id) {
+        String url="http://localhost:8080/api/v1/tickets/"+id+"/delete";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,Void.class);
+
+
+    }
+
+    @Override
+    public void register(String username, String name, String email, String password)  {
+
+
+        String url="http://localhost:8080/api/register/create";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        //headers.add("Authorization","Basic QXBpU2VydmVyOlhZN2ttem9OemwxMDA=");
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("name",username);
+        postMap.put("surname",name);
+        postMap.put("email",email);
+       /* MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        String encoded = Base64.getEncoder().encodeToString(hash);
+        */
+        ////////
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = new byte[0];
+        try {
+            hash = digest.digest(password.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        StringBuffer hexString = new StringBuffer();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+        /////////////////////
+        postMap.put("password",hexString.toString());
+        HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(postMap, headers);
+       // restTemplate.put(uriBuilder.toUriString(),request);
+        restTemplate.put(uriBuilder.toUriString(), request);
     }
 }
 

@@ -24,6 +24,7 @@ public interface ApiService {
     List<Ticket> getTickets(String token);
     List<Ticket> getTicketsByUsername(String token,String username);
     void closeTicketEmployee(String token, String username, int id);
-
+    void deleteTicket(String token,int id);
+    void register(String username,String name,String email,String password);
 
 }

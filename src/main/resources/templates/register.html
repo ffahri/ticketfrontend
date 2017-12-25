@@ -12,18 +12,30 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
 
 <div class="container-fixed">
     <div class="row">
         <div class="col-md-2 col-md-offset-5">
-            <form id="form" th:object="${user}" th:action="@{/login/try}" method="post">
+            <form id="form" th:object="${user}" th:action="@{/register/try}" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">İsim</label>
+                    <div class="controls">
+                        <input id="" type="text"  th:field="${user.surname}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">E-Mail</label>
+                    <div class="controls">
+                        <input id="inputEmail" type="text"  th:field="${user.email}"/>
+                    </div>
+                </div>
                 <div class="control-group">
                     <label class="control-label" for="inputEmail">Username</label>
                     <div class="controls">
-                        <input id="inputEmail" type="text"  th:field="${user.username}"/>
+                        <input id="inputEmail" type="text"  th:field="${user.name}"/>
                     </div>
                 </div>
                 <div class="control-group">
@@ -35,13 +47,12 @@
                 <div class="control-group">
                     <div class="controls">
                         <br/>
-                       <button type="submit" class="btnform">Giriş Yap</button>
+                        <button type="submit" class="btnform">Giriş Yap</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.webischia.ticketfrontend.Controllers;
 
 import com.webischia.ticketfrontend.Domains.Token;
+import com.webischia.ticketfrontend.Domains.User;
 import com.webischia.ticketfrontend.Domains.UserToken;
 import com.webischia.ticketfrontend.Services.ApiService;
 import io.jsonwebtoken.Claims;
@@ -40,11 +41,29 @@ public class LoginController {
         return "index";
     }
 
+    @RequestMapping({"/register","/register/"})
+    private String register(Model model)
+    {
+        model.addAttribute("user", new User());
+        return "register";
+    }
     @RequestMapping({"/login","/login/"})
     private String login(Model model)
     {
             model.addAttribute("user", new UserToken());
             return "login";
+    }
+    @PostMapping
+    @RequestMapping("/register/try")
+    private String getRegister(@ModelAttribute User user,HttpServletRequest request)
+    {
+        //ShoppingCart cart = (ShoppingCart)request.getSession().setAttribute("cart",value);
+        //UserToken test = (UserToken)request.getSession().setAttribute()
+        //System.out.println(user.getPassword());
+        apiService.register(user.getName(),user.getSurname(),user.getEmail(),user.getPassword());
+
+        return "redirect:/index";
+
     }
     @PostMapping
     @RequestMapping("/login/try")
