@@ -22,6 +22,7 @@ public interface ApiService {
     void userCreateMessage(String token, String username,String message, int id);
     //Employee - Ticket
     List<Ticket> getTickets(String token);
+    List<Ticket> searchTickets(String token,String term);
     List<Ticket> getTicketsByUsername(String token,String username);
     void closeTicketEmployee(String token, String username, int id);
     void deleteTicket(String token,int id);

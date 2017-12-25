@@ -55,6 +55,27 @@ public class ManagementController {
         return "redirect:/index";
 
     }
+
+    @RequestMapping("/management/search")
+    private String managementSearch(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
+    {
+        UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
+        if(UserInfo != null && UserInfo.getAccess().equals("Employee")) {
+            //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging
+            model.addAttribute("user",UserInfo);
+            //List<Messages> ticketList = apiService.userGetOwnMessagesByTicketId(UserInfo.getToken().getAccess_token(),UserInfo.getUsername());
+            //  model.addAttribute("msg",ticketList);
+            model.addAttribute("user",UserInfo);
+            model.addAttribute("newticket",new NewTicketDTO());
+            List<Ticket> ticketList = apiService.searchTickets(UserInfo.getToken().getAccess_token(),newTicketDTO.getMessageContext());
+            model.addAttribute("tickets",ticketList);
+            NewTicketDTO newID = new NewTicketDTO();
+            return "management/search";
+        }
+        return "redirect:/index";
+
+    }
+
     //@PostMapping
     @RequestMapping(value="/management/add/message", method= RequestMethod.POST, params="action=answer")
     private String createMessage(@ModelAttribute UserToken user, HttpServletRequest request, Model model , @ModelAttribute NewTicketDTO newTicketDTO) {

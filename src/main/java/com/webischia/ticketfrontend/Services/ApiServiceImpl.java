@@ -280,5 +280,24 @@ public class ApiServiceImpl implements ApiService{
        // restTemplate.put(uriBuilder.toUriString(),request);
         restTemplate.put(uriBuilder.toUriString(), request);
     }
+
+    @Override
+    public List<Ticket> searchTickets(String token, String term) {
+        String url="http://localhost:8080/api/v1/tickets/search/"+term;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+/*
+        ListTickets liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody();
+*/
+
+        List<Ticket> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody().getTickets();
+        // System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+
+        return liste;    }
 }
 
