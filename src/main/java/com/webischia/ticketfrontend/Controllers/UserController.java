@@ -7,12 +7,14 @@ import com.webischia.ticketfrontend.Domains.UserToken;
 import com.webischia.ticketfrontend.Services.ApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -105,8 +107,10 @@ public class UserController {
 
     }
     @RequestMapping("/user/search")
-    private String userSearch(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
+    private String userSearch(HttpServletRequest request, Model model, @Valid @ModelAttribute NewTicketDTO newTicketDTO, BindingResult bindingResult)
     {
+        if(bindingResult.hasErrors())
+            return "redirect:/user/search";
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null && UserInfo.getAccess().equals("Client")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging

@@ -7,9 +7,11 @@ import com.webischia.ticketfrontend.Domains.UserToken;
 import com.webischia.ticketfrontend.Services.ApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -57,8 +59,10 @@ public class ManagementController {
     }
 
     @RequestMapping("/management/search")
-    private String managementSearch(HttpServletRequest request, Model model, @ModelAttribute NewTicketDTO newTicketDTO)
+    private String managementSearch(HttpServletRequest request, Model model, @Valid @ModelAttribute NewTicketDTO newTicketDTO , BindingResult bindingResult)
     {
+        if(bindingResult.hasErrors())
+            return "redirect:/management/search";
         UserToken UserInfo = (UserToken)request.getSession().getAttribute("userinfo");
         if(UserInfo != null && UserInfo.getAccess().equals("Employee")) {
             //System.out.println(UserInfo.getToken().getAccess_token()); this way faster than debugging

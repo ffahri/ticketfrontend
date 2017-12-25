@@ -10,6 +10,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.xml.bind.DatatypeConverter;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +57,10 @@ public class LoginController {
     }
     @PostMapping
     @RequestMapping("/register/try")
-    private String getRegister(@ModelAttribute User user,HttpServletRequest request)
+    private String getRegister(@Valid @ModelAttribute User user, HttpServletRequest request , BindingResult bindingResult)
     {
+        if(bindingResult.hasErrors())
+            throw new RuntimeException("HATALI VERİ GİRİLDİ");
         //ShoppingCart cart = (ShoppingCart)request.getSession().setAttribute("cart",value);
         //UserToken test = (UserToken)request.getSession().setAttribute()
         //System.out.println(user.getPassword());

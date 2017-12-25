@@ -15,6 +15,7 @@
 
 </head>
 <body>
+
 <div class="container-fluid">
     <div class="row-fluid">
 
@@ -49,6 +50,9 @@
     </div>
     <div class="panel-body">
         <form th:object="${newticket}" th:action="@{/management/search}" method="post">
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                <p>Arama metninde hata var</p>
+            </div>
             <label class="control-label"><h3>Arama Terimi</h3></label>
             <input class="form-control" type="text" th:field="${newticket.messageContext}"/>
             <br/>
