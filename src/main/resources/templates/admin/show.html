@@ -1,0 +1,136 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+    <meta charset="UTF-8"/>
+    <title>Show User</title>
+    <style>
+        .container {
+            border: 2px solid #dedede;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        /* Darker chat container */
+        .darker {
+            border-color: #ccc;
+            background-color: #ddd;
+        }
+
+        /* Clear floats */
+        .container::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Style images */
+        .container img {
+            float: left;
+            max-width: 60px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+
+        /* Style the right image */
+        .container img.right {
+            float: right;
+            margin-left: 20px;
+            margin-right:0;
+        }
+        .username
+        {
+            float: left;
+
+            color: lightseagreen;
+
+        }
+
+        /* Style time text */
+        .time-right {
+            float: right;
+            color: darkblue;
+        }
+
+        /* Style time text */
+        .time-left {
+            float: left;
+            color: darkblue;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button> <a class="navbar-brand" href="#" th:href="@{'/management/'}">Panel</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#">Hello , <label th:text="${user.username}">User</label></a>
+                        </li>
+                        <li>
+                            <a th:href="@{'/logout'}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title" th:text="${ticket.ticketTitle}">
+                        Ticket
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="container darker" th:each="messages :${msg}"> <!--// todo rol bazlı renk th:class="${}" apiserver değişecek galiba -->
+
+                        <span class="time-left" th:utext="${messages.userMessage.name} +'   ('+ (${messages.userMessage.email})+')'">User Name</span>
+                        <span class="time-right" th:text="${messages.creationDate}">11:01</span>
+                        <hr/>
+                        <p th:text="${messages.messageContext}">Mesaj mesaj mesaj mesaj mesajjjjj</p>
+
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <form th:object="${newmessage}" th:action="@{/management/add/message}" method="post">
+                        <label class="control-label">Your Message</label>
+                        <input type="hidden" th:value="${newmessage.id}" th:field="${newmessage.id}"/>
+                        <textarea class="form-control" th:field="${newmessage.messageContext}">
+...
+			</textarea>
+                        <br/>
+                        <button class="btn btn-success" name="action" value="answer" type="submit">Send Message</button>
+                        <input type="hidden" th:value="${newmessage.id}" th:field="${newmessage.id}"/>
+                        <button class="btn btn-danger" name="action" value="close" type="submit" th:text="${ticket.status ? 'Close Ticket' : 'Open Ticket'}">Close Ticket</button>
+                        <button class="btn btn-danger" name="action" value="delete" type="submit">Delete Ticket</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

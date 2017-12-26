@@ -299,5 +299,88 @@ public class ApiServiceImpl implements ApiService{
         // System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
 
         return liste;    }
+
+    @Override
+    public List<User> getUsers(String token) {
+        String url="http://localhost:8080/api/v1/users/";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+/*
+        ListTickets liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getBody();
+*/
+
+        List<User> liste = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListUsers.class).getBody().getUserList();
+        // System.out.println(restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,ListTickets.class).getStatusCode());
+
+        return liste;
+    }
+
+    @Override
+    public User getUser(String token , int id) {
+        String url="http://localhost:8080/api/v1/users/"+id;
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer "+token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(headers);
+        User user = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET,entity,User.class).getBody();
+        return user;
+    }
+    @Override
+    public void registerE(String username, String name, String email, String password)  {
+
+
+        String url="http://localhost:8080/api/register/create/e";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(url);
+
+        HttpHeaders headers = new HttpHeaders();
+        //headers.add("Authorization","Basic QXBpU2VydmVyOlhZN2ttem9OemwxMDA=");
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("name",username);
+        postMap.put("surname",name);
+        postMap.put("email",email);
+       /* MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        String encoded = Base64.getEncoder().encodeToString(hash);
+        */
+        ////////
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = new byte[0];
+        try {
+            hash = digest.digest(password.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        StringBuffer hexString = new StringBuffer();
+
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        /////////////////////
+        postMap.put("password",hexString.toString());
+        HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(postMap, headers);
+        // restTemplate.put(uriBuilder.toUriString(),request);
+        restTemplate.put(uriBuilder.toUriString(), request);
+    }
 }
 

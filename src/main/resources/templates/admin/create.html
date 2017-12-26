@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+    <meta charset="UTF-8">
+    <title>Admin Create</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="navbar-header">
+
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button> <a class="navbar-brand" href="#" th:href="@{'/admin/'}">Panel</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#">Hello , <label th:text="${user.username}">User</label></a>
+            </li>
+            <li>
+                <a th:href="@{'/logout'}">Logout</a>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+<div class="panel-header">
+<h3></h3>
+</div>
+<div class="panel-body">
+
+<div class="container-fixed">
+    <div class="row">
+
+        <div class="col-md-2 col-md-offset-5">
+            <form id="form" th:object="${userz}" th:action="@{/admin/create}" method="post">
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">İsim</label>
+                    <div class="controls">
+                        <input id="" type="text"  th:field="${userz.surname}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">E-Mail</label>
+                    <div class="controls">
+                        <input id="inputEmail" type="text"  th:field="${userz.email}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">Username</label>
+                    <div class="controls">
+                        <input id="inputEmail" type="text"  th:field="${userz.name}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputPassword">Password</label>
+                    <div class="controls">
+                        <input id="inputPassword" type="password"  th:field="${userz.password}"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <br/>
+                        <button type="submit" class="btnform">Gönder</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>
